@@ -1,0 +1,313 @@
+<title>アイカツ Daily Log</title>
+<style>
+  :root{
+    --paper:#fdf5f8;
+    --surface:#f7ecf1;
+    --card-bg:#ffffff;
+    --ink:#241a2e;
+    --ink-soft:rgba(36,26,46,.62);
+    --ink-faint:rgba(36,26,46,.38);
+    --accent:#e23279;
+    --accent-2:#6c4fd6;
+    --gold:#c9820f;
+    --line:rgba(36,26,46,.12);
+    --shadow:0 1px 2px rgba(36,26,46,.06), 0 8px 24px -12px rgba(36,26,46,.18);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#161120;
+      --surface:#1d1728;
+      --card-bg:#221b2e;
+      --ink:#f3e9f4;
+      --ink-soft:rgba(243,233,244,.68);
+      --ink-faint:rgba(243,233,244,.42);
+      --accent:#ff5c9e;
+      --accent-2:#a992ff;
+      --gold:#f4b942;
+      --line:rgba(243,233,244,.14);
+      --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px -12px rgba(0,0,0,.55);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#161120; --surface:#1d1728; --card-bg:#221b2e; --ink:#f3e9f4;
+    --ink-soft:rgba(243,233,244,.68); --ink-faint:rgba(243,233,244,.42);
+    --accent:#ff5c9e; --accent-2:#a992ff; --gold:#f4b942;
+    --line:rgba(243,233,244,.14);
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px -12px rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+  :root[data-theme="light"]{
+    --paper:#fdf5f8; --surface:#f7ecf1; --card-bg:#ffffff; --ink:#241a2e;
+    --ink-soft:rgba(36,26,46,.62); --ink-faint:rgba(36,26,46,.38);
+    --accent:#e23279; --accent-2:#6c4fd6; --gold:#c9820f;
+    --line:rgba(36,26,46,.12);
+    --shadow:0 1px 2px rgba(36,26,46,.06), 0 8px 24px -12px rgba(36,26,46,.18);
+    color-scheme: light;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic UI","Noto Sans JP",system-ui,-apple-system,"Segoe UI",sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:var(--accent);}
+  a:focus-visible, button:focus-visible, .navlink:focus-visible{
+    outline:2px solid var(--accent-2); outline-offset:2px; border-radius:4px;
+  }
+
+  .app{display:flex; min-height:100vh; max-width:1400px; margin:0 auto;}
+
+  /* ---------- Sidebar ---------- */
+  .sidebar{
+    width:272px; flex:none;
+    border-right:1px solid var(--line);
+    padding:28px 18px 28px 24px;
+    position:sticky; top:0; align-self:flex-start; height:100vh;
+    overflow-y:auto; overflow-x:hidden;
+  }
+  .brand{display:flex; align-items:baseline; gap:8px; margin:0 0 4px;}
+  .brand .mark{font-size:22px;}
+  .brand h1{font-size:17px; font-weight:800; letter-spacing:.01em; margin:0;}
+  .brand-sub{font-size:11.5px; color:var(--ink-faint); letter-spacing:.06em; text-transform:uppercase; margin:0 0 22px;}
+
+  .tabbar{display:flex; flex-direction:column; gap:4px; margin-bottom:22px;}
+  .tabbtn{
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    padding:10px 12px; border-radius:10px; border:1px solid transparent;
+    background:transparent; color:var(--ink-soft); font-size:14px; font-weight:700;
+    cursor:pointer; text-align:left; font-family:inherit;
+  }
+  .tabbtn .count{font-size:11px; font-weight:700; color:var(--ink-faint); font-variant-numeric:tabular-nums;}
+  .tabbtn:hover{background:var(--surface);}
+  .tabbtn[aria-selected="true"]{
+    background:var(--card-bg); border-color:var(--line); color:var(--ink); box-shadow:var(--shadow);
+  }
+  .tabbtn[aria-selected="true"] .count{color:var(--accent);}
+
+  .indexlabel{font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-faint); margin:0 0 8px 4px;}
+  .indexlist{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:1px;}
+  .navlink{
+    display:block; padding:7px 10px; border-radius:8px; font-size:13px; color:var(--ink-soft);
+    text-decoration:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .navlink:hover{background:var(--surface); color:var(--ink);}
+  .navlink.current{background:var(--surface); color:var(--accent); font-weight:700;}
+
+  .note{
+    margin-top:24px; padding:12px 12px; border-radius:10px; background:var(--surface);
+    font-size:11.5px; color:var(--ink-faint); line-height:1.55;
+  }
+
+  /* ---------- Main ---------- */
+  main{flex:1; min-width:0; padding:32px clamp(16px,4vw,48px) 80px;}
+  .pagehead{margin-bottom:28px;}
+  .pagehead h2{font-size:22px; margin:0 0 6px; font-weight:800; text-wrap:balance;}
+  .pagehead p{margin:0; color:var(--ink-soft); font-size:13.5px;}
+
+  .section{scroll-margin-top:20px; margin-bottom:40px;}
+  .section-head{
+    position:sticky; top:0; z-index:2; background:var(--paper);
+    padding:10px 0 12px; margin-bottom:16px; border-bottom:1px solid var(--line);
+    display:flex; align-items:baseline; gap:10px; flex-wrap:wrap;
+  }
+  .section-head h3{font-size:18px; margin:0; font-weight:800;}
+  .section-head .sub{font-size:12px; color:var(--ink-faint); font-variant-numeric:tabular-nums;}
+
+  .cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:14px;}
+
+  .card{
+    background:var(--card-bg); border:1px solid var(--line); border-radius:14px;
+    padding:16px 16px 14px; box-shadow:var(--shadow);
+    display:flex; flex-direction:column; gap:8px;
+    border-left:4px solid var(--tier-color, var(--accent));
+    min-width:0;
+  }
+  .card h4{margin:0; font-size:15px; font-weight:800; line-height:1.45; text-wrap:balance;}
+  .card p.desc{margin:0; font-size:13px; color:var(--ink-soft); line-height:1.65;}
+
+  .stars{display:flex; align-items:center; gap:8px; margin-top:2px;}
+  .stars .glyphs{font-size:15px; letter-spacing:1px; color:var(--gold);}
+  .stars .glyphs .off{color:var(--ink-faint);}
+  .stars .num{font-size:11px; color:var(--ink-faint); font-variant-numeric:tabular-nums;}
+
+  .reason{
+    font-size:11.5px; color:var(--ink-faint); border-top:1px dashed var(--line);
+    padding-top:8px; margin-top:2px; line-height:1.55;
+  }
+  .reason b{color:var(--ink-soft); font-weight:700;}
+
+  .links{display:flex; flex-wrap:wrap; gap:6px 10px; overflow-x:auto;}
+  .links a{font-size:12px; text-decoration:none; white-space:nowrap;}
+  .links a:hover{text-decoration:underline;}
+
+  .empty{
+    padding:32px 20px; text-align:center; color:var(--ink-faint); font-size:13.5px;
+    border:1px dashed var(--line); border-radius:14px;
+  }
+
+  .foot-note{
+    margin-top:36px; padding-top:16px; border-top:1px solid var(--line);
+    font-size:11.5px; color:var(--ink-faint); line-height:1.6;
+  }
+
+  .mobiletabs{display:none;}
+
+  @media (max-width:860px){
+    .app{display:block;}
+    .sidebar{
+      position:sticky; top:0; width:auto; height:auto; max-height:none;
+      border-right:none; border-bottom:1px solid var(--line);
+      padding:16px 16px 12px; z-index:5; background:var(--paper);
+      overflow-y:visible;
+    }
+    .sidebar .indexwrap{max-height:38vh; overflow-y:auto;}
+    .tabbar{flex-direction:row; gap:8px; margin-bottom:14px;}
+    .tabbtn{flex:1; justify-content:center;}
+    main{padding:20px 16px 60px;}
+    .section-head{top:0;}
+  }
+</style>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><span class="mark">🎀</span><h1>アイカツ Daily Log</h1></div>
+    <p class="brand-sub">Aikatsu series digest</p>
+
+    <div class="tabbar" role="tablist" aria-label="表示切替">
+      <button class="tabbtn" data-tab="daily" role="tab" aria-selected="true">日次 <span class="count" data-count="daily"></span></button>
+      <button class="tabbtn" data-tab="weekly" role="tab" aria-selected="false">週次まとめ <span class="count" data-count="weekly"></span></button>
+      <button class="tabbtn" data-tab="monthly" role="tab" aria-selected="false">月次まとめ <span class="count" data-count="monthly"></span></button>
+    </div>
+
+    <div class="indexwrap">
+      <p class="indexlabel">目次</p>
+      <ul class="indexlist" id="indexlist"></ul>
+    </div>
+
+    <div class="note">注目度（★）は、情報源の数・公式度・話題性などから算出した独自の目安値です。実際のSNS集計データではありません。</div>
+  </aside>
+
+  <main id="main">
+    <div class="pagehead">
+      <h2 id="pagetitle">日次ダイジェスト</h2>
+      <p id="pagesub">「アイカツ」シリーズに関する最新情報を毎日収集しています。</p>
+    </div>
+    <div id="content"></div>
+  </main>
+</div>
+
+<script>
+  const DATA = __AIKATSU_DATA_JSON__;
+
+  const TABS = {
+    daily:   {label:"日次",     title:"日次ダイジェスト",   sub:"「アイカツ」シリーズに関する最新情報を毎日収集しています。最新の日付が先頭です。", sorted:false},
+    weekly:  {label:"週次まとめ", title:"週次まとめ",       sub:"直近1週間の話題を注目度順に整理しています。最新の週が先頭です。", sorted:true},
+    monthly: {label:"月次まとめ", title:"月次まとめ",       sub:"その月の重要な出来事・発表を注目度順にまとめています。最新の月が先頭です。", sorted:true},
+  };
+
+  let currentTab = "daily";
+
+  function starGlyphs(score){
+    const n = Math.max(0, Math.min(5, score|0));
+    const on = "★".repeat(n);
+    const off = "☆".repeat(5-n);
+    return `<span class="glyphs">${on}<span class="off">${off}</span></span>`;
+  }
+
+  function tierColor(score){
+    if(score >= 5) return "var(--accent)";
+    if(score >= 4) return "var(--accent-2)";
+    if(score >= 3) return "var(--gold)";
+    return "var(--line)";
+  }
+
+  function escapeHtml(s){
+    return (s||"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+
+  function renderCard(topic){
+    const links = (topic.links||[]).map(l =>
+      `<a href="${escapeHtml(l.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(l.text)} ↗</a>`
+    ).join("");
+    return `
+      <article class="card" style="--tier-color:${tierColor(topic.score)}">
+        <h4>${escapeHtml(topic.title)}</h4>
+        <p class="desc">${escapeHtml(topic.desc)}</p>
+        <div class="stars">${starGlyphs(topic.score)}<span class="num">${topic.score}/5</span></div>
+        ${links ? `<div class="links">${links}</div>` : ""}
+        ${topic.reason ? `<div class="reason"><b>根拠:</b> ${escapeHtml(topic.reason)}</div>` : ""}
+      </article>`;
+  }
+
+  function renderSection(sec){
+    return `
+      <section class="section" id="${sec.slug}">
+        <div class="section-head">
+          <h3>${escapeHtml(sec.heading)}</h3>
+          <span class="sub">${sec.topics.length}件</span>
+        </div>
+        <div class="cards">${sec.topics.map(renderCard).join("")}</div>
+      </section>`;
+  }
+
+  function renderTab(tab){
+    const sections = DATA[tab] || [];
+    document.getElementById("pagetitle").textContent = TABS[tab].title;
+    document.getElementById("pagesub").textContent = TABS[tab].sub;
+    const content = document.getElementById("content");
+    if(!sections.length){
+      content.innerHTML = `<div class="empty">まだ${TABS[tab].label}のデータがありません。</div>`;
+    } else {
+      content.innerHTML = sections.map(renderSection).join("");
+    }
+
+    const indexlist = document.getElementById("indexlist");
+    indexlist.innerHTML = sections.map((sec,i) =>
+      `<li><a class="navlink${i===0?" current":""}" href="#${sec.slug}" data-slug="${sec.slug}">${escapeHtml(sec.heading)}</a></li>`
+    ).join("");
+
+    Object.keys(TABS).forEach(k=>{
+      document.querySelector(`.tabbtn[data-tab="${k}"]`).setAttribute("aria-selected", k===tab ? "true":"false");
+    });
+  }
+
+  function initCounts(){
+    Object.keys(TABS).forEach(k=>{
+      const total = (DATA[k]||[]).reduce((n,s)=>n+s.topics.length,0);
+      const el = document.querySelector(`[data-count="${k}"]`);
+      if(el) el.textContent = total ? total : "";
+    });
+  }
+
+  document.querySelectorAll(".tabbtn").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      currentTab = btn.dataset.tab;
+      renderTab(currentTab);
+      window.scrollTo({top:0, behavior:"smooth"});
+    });
+  });
+
+  document.getElementById("indexlist").addEventListener("click", (e)=>{
+    const a = e.target.closest(".navlink");
+    if(!a) return;
+    e.preventDefault();
+    const target = document.getElementById(a.dataset.slug);
+    if(target) target.scrollIntoView({behavior:"smooth", block:"start"});
+    document.querySelectorAll(".navlink").forEach(n=>n.classList.remove("current"));
+    a.classList.add("current");
+  });
+
+  initCounts();
+  renderTab(currentTab);
+</script>
+
+<div class="foot-note">
+  🎀 アイカツ Daily Log — 毎日 JST 15:00 に自動収集・更新。日曜日に週次まとめ、月末に月次まとめを追加します。注目度は独自の目安値であり、実際のSNS集計データではありません。
+</div>

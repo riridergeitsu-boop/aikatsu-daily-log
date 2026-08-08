@@ -17,9 +17,10 @@
     --card-shadow: 0 2px 10px rgba(120, 50, 110, 0.08);
     --star-fill: #ff5fa8;
     --star-track: #eadcee;
+    --hero-gold: #f0c869;
   }
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme="light"]) {
       --bg: #1a1420;
       --bg-alt: #241c2c;
       --text: #f1e9f6;
@@ -48,34 +49,57 @@
     margin: 0;
     background: var(--bg);
     color: var(--text);
-    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", sans-serif;
+    font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans JP", system-ui, sans-serif;
     line-height: 1.65;
   }
   header.site-header {
-    padding: 28px 20px 18px;
+    padding: 40px 20px 30px;
     text-align: center;
-    background: linear-gradient(135deg, var(--accent), var(--accent-alt));
+    background: linear-gradient(135deg, #7a5cf0 0%, #e0409c 55%, #f0c869 100%);
     color: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  header.site-header::before {
+    content: "✨ ✦ ✨ ✦ ✨ ✦ ✨ ✦ ✨ ✦ ✨ ✦ ✨ ✦ ✨ ✦ ✨";
+    position: absolute;
+    top: -6px; left: 0; right: 0;
+    font-size: 13px;
+    letter-spacing: 10px;
+    opacity: 0.35;
+    white-space: nowrap;
   }
   header.site-header h1 {
-    margin: 0 0 6px;
-    font-size: clamp(22px, 4vw, 32px);
-    letter-spacing: 0.02em;
+    margin: 10px 0 8px;
+    font-size: clamp(24px, 4.5vw, 36px);
+    letter-spacing: 0.03em;
+    font-weight: 800;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.15);
   }
-  header.site-header p {
+  header.site-header .tagline {
+    margin: 0 0 10px;
+    font-size: 14px;
+    opacity: 0.95;
+    font-weight: 600;
+  }
+  header.site-header .updated {
     margin: 0;
-    font-size: 13px;
-    opacity: 0.92;
+    font-size: 12.5px;
+    opacity: 0.85;
+    display: inline-block;
+    background: rgba(255,255,255,0.18);
+    padding: 4px 14px;
+    border-radius: 999px;
   }
   .container {
     max-width: 1080px;
     margin: 0 auto;
-    padding: 20px 16px 60px;
+    padding: 24px 16px 60px;
   }
   .tabs {
     display: flex;
     gap: 8px;
-    margin-bottom: 20px;
+    margin-bottom: 22px;
     border-bottom: 1px solid var(--border);
     overflow-x: auto;
   }
@@ -86,21 +110,24 @@
     color: var(--text-muted);
     font-size: 15px;
     font-weight: 700;
-    padding: 10px 18px;
+    padding: 10px 20px;
     cursor: pointer;
     border-bottom: 3px solid transparent;
     white-space: nowrap;
+    transition: color 0.15s ease, border-color 0.15s ease;
   }
+  .tab-btn:hover { color: var(--accent); }
   .tab-btn.active {
     color: var(--accent);
     border-bottom-color: var(--accent);
+    background: linear-gradient(180deg, transparent, rgba(224,64,156,0.06));
   }
   .tab-panel { display: none; }
   .tab-panel.active { display: block; }
   .layout {
     display: grid;
-    grid-template-columns: 220px 1fr;
-    gap: 24px;
+    grid-template-columns: 230px 1fr;
+    gap: 26px;
     align-items: start;
   }
   @media (max-width: 720px) {
@@ -116,95 +143,118 @@
     overflow-y: auto;
     background: var(--bg-alt);
     border: 1px solid var(--border);
-    border-radius: 12px;
+    border-radius: 14px;
     padding: 10px;
   }
   .side-nav li { margin: 2px 0; }
   .side-nav .nav-link {
     display: block;
-    padding: 7px 10px;
-    border-radius: 8px;
+    padding: 8px 12px;
+    border-radius: 9px;
     color: var(--text);
     text-decoration: none;
     font-size: 13.5px;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
   }
-  .side-nav .nav-link:hover,
-  .side-nav .nav-link.current {
+  .side-nav .nav-link:hover {
     background: var(--border);
     color: var(--accent);
+    transform: translateX(2px);
+  }
+  .side-nav .nav-link.current {
+    background: linear-gradient(90deg, var(--accent), var(--accent-alt));
+    color: #fff;
+    font-weight: 700;
   }
   .nav-empty { color: var(--text-muted); font-size: 13px; padding: 8px; }
-  .period-block { margin-bottom: 30px; scroll-margin-top: 14px; }
+  .period-block { margin-bottom: 34px; scroll-margin-top: 14px; }
   .period-block h3 {
-    margin: 0 0 12px;
-    font-size: 18px;
-    padding-bottom: 6px;
+    margin: 0 0 14px;
+    font-size: 19px;
+    padding-bottom: 8px;
     border-bottom: 2px solid var(--border);
+    position: relative;
+  }
+  .period-block h3::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: -2px;
+    width: 46px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-alt));
   }
   .card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 14px;
-    overflow-x: auto;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 16px;
     padding-bottom: 2px;
   }
   .card {
     background: var(--bg-alt);
     border: 1px solid var(--border);
-    border-radius: 14px;
-    padding: 14px 16px;
+    border-radius: 16px;
+    padding: 16px 18px;
     box-shadow: var(--card-shadow);
     min-width: 0;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover {
+    transform: translateY(-3px) scale(1.01);
+    box-shadow: 0 8px 22px rgba(120, 50, 110, 0.18);
+    border-color: var(--accent);
   }
   .card-head {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    margin-bottom: 8px;
+    gap: 7px;
+    margin-bottom: 9px;
   }
   .card-head h4 {
     margin: 0;
     font-size: 15px;
-    line-height: 1.4;
+    line-height: 1.45;
+    font-weight: 700;
   }
   .stars { display: inline-flex; align-items: center; gap: 8px; }
   .stars-glyph { color: var(--star-fill); letter-spacing: 1px; font-size: 14px; }
   .stars-bar {
     display: inline-block;
-    width: 60px;
+    width: 64px;
     height: 6px;
     background: var(--star-track);
     border-radius: 4px;
     overflow: hidden;
   }
-  .stars-fill { display: block; height: 100%; background: var(--star-fill); }
+  .stars-fill { display: block; height: 100%; background: linear-gradient(90deg, var(--accent), var(--hero-gold)); }
   .topic-desc { margin: 6px 0; font-size: 13.5px; color: var(--text); }
   .topic-meta-row { font-size: 12.5px; color: var(--text-muted); margin: 4px 0; }
-  .topic-sources { font-size: 12.5px; margin: 4px 0; word-break: break-word; }
+  .topic-sources { font-size: 12.5px; margin: 4px 0; word-break: break-word; overflow-wrap: anywhere; }
   .topic-sources a { color: var(--accent-alt); }
-  .topic-rationale { font-size: 11.5px; color: var(--text-muted); margin-top: 6px; }
-  .empty-note { color: var(--text-muted); font-size: 13.5px; padding: 10px 0; }
+  .topic-rationale { font-size: 11.5px; color: var(--text-muted); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); }
+  .empty-note { color: var(--text-muted); font-size: 13.5px; padding: 14px; background: var(--bg-alt); border: 1px dashed var(--border); border-radius: 12px; }
   .disclaimer {
-    margin-top: 34px;
-    padding: 12px 14px;
+    margin-top: 38px;
+    padding: 14px 16px;
     border: 1px dashed var(--border);
-    border-radius: 10px;
+    border-radius: 12px;
     font-size: 12px;
     color: var(--text-muted);
+    background: var(--bg-alt);
   }
   footer.site-footer {
     text-align: center;
     font-size: 12px;
     color: var(--text-muted);
-    padding: 18px;
+    padding: 20px;
   }
   a { color: var(--accent-alt); }
 </style>
 </head>
 <body>
 <header class="site-header">
-  <h1>アイカツ Daily Digest</h1>
-  <p>「アイカツ」シリーズ関連の最新情報を毎日自動収集・記録 ／ 最終更新: 2026年8月7日</p>
+  <h1>✨ アイカツ Daily Digest ✨</h1>
+  <p class="tagline">「アイカツ」シリーズ関連の最新トピックを毎日自動収集・記録</p>
+  <p class="updated">最終更新: 2026年8月8日</p>
 </header>
 
 <div class="container">
@@ -216,23 +266,83 @@
 
   <section class="tab-panel active" id="tab-daily">
     <div class="layout">
-      <ul class="side-nav" id="daily-nav"><li><a href="#daily-2026年8月7日-0" class="nav-link">2026年8月7日</a></li>
-<li><a href="#daily-2026年8月6日-1" class="nav-link">2026年8月6日</a></li>
-<li><a href="#daily-2026年8月5日-2" class="nav-link">2026年8月5日</a></li>
-<li><a href="#daily-2026年8月3日-3" class="nav-link">2026年8月3日</a></li>
-<li><a href="#daily-2026年8月2日-4" class="nav-link">2026年8月2日</a></li>
-<li><a href="#daily-2026年8月1日-5" class="nav-link">2026年8月1日</a></li>
-<li><a href="#daily-2026年7月31日-6" class="nav-link">2026年7月31日</a></li>
-<li><a href="#daily-2026年7月30日-7" class="nav-link">2026年7月30日</a></li>
-<li><a href="#daily-2026年7月29日-8" class="nav-link">2026年7月29日</a></li>
-<li><a href="#daily-2026年7月28日-9" class="nav-link">2026年7月28日</a></li>
-<li><a href="#daily-2026年7月27日-10" class="nav-link">2026年7月27日</a></li>
-<li><a href="#daily-2026年7月26日-11" class="nav-link">2026年7月26日</a></li>
-<li><a href="#daily-2026年7月25日-12" class="nav-link">2026年7月25日</a></li></ul>
+      <ul class="side-nav" id="daily-nav"><li><a href="#daily-2026年8月8日-0" class="nav-link">2026年8月8日</a></li>
+<li><a href="#daily-2026年8月7日-1" class="nav-link">2026年8月7日</a></li>
+<li><a href="#daily-2026年8月6日-2" class="nav-link">2026年8月6日</a></li>
+<li><a href="#daily-2026年8月5日-3" class="nav-link">2026年8月5日</a></li>
+<li><a href="#daily-2026年8月3日-4" class="nav-link">2026年8月3日</a></li>
+<li><a href="#daily-2026年8月2日-5" class="nav-link">2026年8月2日</a></li>
+<li><a href="#daily-2026年8月1日-6" class="nav-link">2026年8月1日</a></li>
+<li><a href="#daily-2026年7月31日-7" class="nav-link">2026年7月31日</a></li>
+<li><a href="#daily-2026年7月30日-8" class="nav-link">2026年7月30日</a></li>
+<li><a href="#daily-2026年7月29日-9" class="nav-link">2026年7月29日</a></li>
+<li><a href="#daily-2026年7月28日-10" class="nav-link">2026年7月28日</a></li>
+<li><a href="#daily-2026年7月27日-11" class="nav-link">2026年7月27日</a></li>
+<li><a href="#daily-2026年7月26日-12" class="nav-link">2026年7月26日</a></li>
+<li><a href="#daily-2026年7月25日-13" class="nav-link">2026年7月25日</a></li></ul>
       <div id="daily-content">
-      <section id="daily-2026年8月7日-0" class="period-block">
+      <section id="daily-2026年8月8日-0" class="period-block">
+        <h3>2026年8月8日</h3>
+      <div class="card-grid">
+      <article class="card">
+        <div class="card-head">
+          <h4>ガシャポン「データカードダス アイカツ！ ミニチュアコレクション」8月第4週発売決定</h4>
+          <span class="stars" title="注目度 3/5" aria-label="注目度 3 / 5"><span class="stars-glyph">★★★☆☆</span><span class="stars-bar"><span class="stars-fill" style="width:60%"></span></span></span>
+        </div>
+        <p class="topic-desc">バンダイのカプセルトイブランド「ガシャポン」より、アーケードカードゲーム「データカードダス アイカツ！」の筐体をモチーフにしたミニチュアが登場。「第1弾」「第6弾」「2014年シリーズ1弾」「あかりジェネレーションデザイン」「2015年シリーズ6弾」の全5種で、全種ボタンが押せるギミック付き、うち2種はボタンを押すとプレイ音が流れる特別仕様。価格は1回500円（税込）で8月第4週より順次発売。</p>
+        <div class="topic-meta-row">🗓 2026年8月7日発表</div>
+        <div class="topic-sources">🔗 <a href="https://www.inside-games.jp/article/2026/08/07/185893.html" target="_blank" rel="noopener noreferrer">インサイド</a> / <a href="https://news.yahoo.co.jp/articles/7d8da47dd9bac5962a660bbd29d4c306c515ed98" target="_blank" rel="noopener noreferrer">Yahoo!ニュース</a></div>
+        <div class="topic-rationale">根拠: ゲーム系ニュースメディア（インサイド）発の情報がYahoo!ニュースにも転載され、初代〜歴代デザインを再現した懐かしさ訴求のグッズとして注目。</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h4>「アイカツスタイル観光 in 北海道」POP UP SHOP、札幌ファクトリーにて開催中（本日含め残り2日、〜8/9まで）</h4>
+          <span class="stars" title="注目度 3/5" aria-label="注目度 3 / 5"><span class="stars-glyph">★★★☆☆</span><span class="stars-bar"><span class="stars-fill" style="width:60%"></span></span></span>
+        </div>
+        <p class="topic-desc">『アイカツ！デザインマート BY アイカツ！スタイル』のPOP UP SHOP「アイカツスタイル観光」が北海道初開催として札幌ファクトリーにて8/1(土)〜8/9(日)の期間限定で展開中。あかり・のの・リサの新規描き下ろしイラストグッズや札幌限定「木彫りのメルリ」グッズが販売され、いよいよ翌日が最終日となる。</p>
+        <div class="topic-meta-row">🗓 現在開催中（8/1〜8/9、本日含め残り2日）</div>
+        <div class="topic-sources">🔗 <a href="https://x.com/aikatsu_style/status/2063071088389791933" target="_blank" rel="noopener noreferrer">アイカツ！デザインマート公式X</a></div>
+        <div class="topic-rationale">根拠: 公式アカウントによる地域限定POP UP SHOPの告知で、会期終了目前のため駆け込み需要が見込まれる。</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h4>『アイカツ！×プリパラ THE MOVIE -出会いのキセキ-』×スイーツパラダイス コラボカフェ、上野マルイ店にて開催中（開催8日目）</h4>
+          <span class="stars" title="注目度 4/5" aria-label="注目度 4 / 5"><span class="stars-glyph">★★★★☆</span><span class="stars-bar"><span class="stars-fill" style="width:80%"></span></span></span>
+        </div>
+        <p class="topic-desc">スイーツパラダイス上野マルイ店にて8/1(金)より開催中の劇場版『アイカツ！×プリパラ THE MOVIE -出会いのキセキ-』コラボカフェが引き続き営業中。8/31(日)までの期間限定で、コラボメニュー注文ごとのオリジナルコースター、来店ごとのランチョンマット等のノベルティ配布や描き下ろしグッズ販売が続く。9月にはカフェスタンド京都スイーツパラダイスでも開催予定。</p>
+        <div class="topic-meta-row">🗓 現在開催中（8/1〜8/31）</div>
+        <div class="topic-sources">🔗 <a href="https://www.sweets-paradise.jp/collaboration/aikatsu-pripara" target="_blank" rel="noopener noreferrer">スイーツパラダイス公式サイト</a> / <a href="https://x.com/SP_collabo/status/1947220015989809543" target="_blank" rel="noopener noreferrer">スイーツパラダイスコラボ公式X</a></div>
+        <div class="topic-rationale">根拠: 公式コラボカフェアカウント・公式サイトで発表された映画合同コラボ企画で、開催中も継続的にノベルティ展開が案内されている。</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h4>coly cafe!（池袋PARCO）×『アイカツ！10th STORY ～未来へのSTARWAY～』コラボ、前期開催中（8/16より後期切替予定）</h4>
+          <span class="stars" title="注目度 3/5" aria-label="注目度 3 / 5"><span class="stars-glyph">★★★☆☆</span><span class="stars-bar"><span class="stars-fill" style="width:60%"></span></span></span>
+        </div>
+        <p class="topic-desc">コラボカフェ「coly cafe!」池袋PARCO店にて開催中の劇場版『アイカツ！10th STORY ～未来へのSTARWAY～』コラボレーション（7/31〜8/31）が引き続き開催中。前期は8/15までで、8/16(日)から後期メニュー・グッズへの切り替えが予定されている。</p>
+        <div class="topic-meta-row">🗓 現在開催中（7/31〜8/31、前期〜8/15）</div>
+        <div class="topic-sources">🔗 <a href="https://x.com/colycafe_info/status/2070431890952122402" target="_blank" rel="noopener noreferrer">coly cafe!公式X</a></div>
+        <div class="topic-rationale">根拠: コラボカフェ公式アカウントの発表を起点に開催中の継続案件。後期切替を控え引き続き注目度を維持。</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h4>『アイカツ！シリーズ』ブランドイメージのルームフレグランス＆チャーム付きハンドクリーム、プレミアムバンダイで予約受付中</h4>
+          <span class="stars" title="注目度 3/5" aria-label="注目度 3 / 5"><span class="stars-glyph">★★★☆☆</span><span class="stars-bar"><span class="stars-fill" style="width:60%"></span></span></span>
+        </div>
+        <p class="topic-desc">バンダイナムコグループ公式通販サイト「プレミアムバンダイ」にて8/3(月)12時より開始した、アイカツ！シリーズのブランドイメージを活かしたルームフレグランスと、ドレスモチーフのチャーム付きハンドクリームの予約受付が引き続き受付中。</p>
+        <div class="topic-meta-row">🗓 現在受付中（8/3〜）</div>
+        <div class="topic-sources">🔗 <a href="https://prtimes.jp/main/html/rd/p/000000965.000055569.html" target="_blank" rel="noopener noreferrer">PR TIMES（バンダイ）</a> / <a href="https://www.aikatsu.net/portal/topics/topics.php?id=22474" target="_blank" rel="noopener noreferrer">オールアイカツ！公式ポータル</a></div>
+        <div class="topic-rationale">根拠: バンダイ公式プレスリリース・公式ポータルで告知された新規ライフスタイルグッズの予約が継続中。</div>
+      </article></div>
+      </section>
+
+      <section id="daily-2026年8月7日-1" class="period-block">
         <h3>2026年8月7日</h3>
-        <div class="card-grid">
+      <div class="card-grid">
       <article class="card">
         <div class="card-head">
           <h4>『アイカツ！×プリパラ THE MOVIE -出会いのキセキ-』×スイーツパラダイス コラボカフェ、上野マルイ店にて開催中（開催7日目）</h4>
@@ -289,9 +399,9 @@
       </article></div>
       </section>
 
-      <section id="daily-2026年8月6日-1" class="period-block">
+      <section id="daily-2026年8月6日-2" class="period-block">
         <h3>2026年8月6日</h3>
-        <div class="card-grid">
+      <div class="card-grid">
       <article class="card">
         <div class="card-head">
           <h4>『アイカツ！×プリパラ THE MOVIE -出会いのキセキ-』×スイーツパラダイス コラボカフェ、上野マルイ店にて開催中（開催6日目）</h4>
@@ -348,9 +458,9 @@
       </article></div>
       </section>
 
-      <section id="daily-2026年8月5日-2" class="period-block">
+      <section id="daily-2026年8月5日-3" class="period-block">
         <h3>2026年8月5日</h3>
-        <div class="card-grid">
+      <div class="card-grid">
       <article class="card">
         <div class="card-head">
           <h4>『アイカツ！×プリパラ THE MOVIE -出会いのキセキ-』×スイーツパラダイス コラボカフェ、上野マルイ店にて開催中（開催5日目）</h4>
@@ -407,20 +517,9 @@
       </article></div>
       </section>
 
-      <section id="daily-2026年8月3日-3" class="period-block">
+      <section id="daily-2026年8月3日-4" class="period-block">
         <h3>2026年8月3日</h3>
-        <div class="card-grid">
-      <article class="card">
-        <div class="card-head">
-          <h4>『アイカツ！×プリパラ THE MOVIE -出会いのキセキ-』×スイーツパラダイス コラボカフェ、上野マルイ店にて開催中（開催3日目）</h4>
-          <span class="stars" title="注目度 4/5" aria-label="注目度 4 / 5"><span class="stars-glyph">★★★★☆</span><span class="stars-bar"><span class="stars-fill" style="width:80%"></span></span></span>
-        </div>
-        <p class="topic-desc">スイーツパラダイス上野マルイ店にて8/1(金)より開催中の劇場版『アイカツ！×プリパラ THE MOVIE -出会いのキセキ-』コラボカフェが引き続き営業中。8/31(日)までの期間限定で、コラボメニュー注文ごとのオリジナルコースター、来店ごとのランチョンマット等のノベルティ配布や描き下ろしグッズ販売が続く。9月には京都のカフェスタンドでも展開予定。</p>
-        <div class="topic-meta-row">🗓 現在開催中（8/1〜8/31）</div>
-        <div class="topic-sources">🔗 <a href="https://www.sweets-paradise.jp/collaboration/aikatsu-pripara" target="_blank" rel="noopener noreferrer">スイーツパラダイス公式サイト</a> / <a href="https://x.com/SP_collabo/status/1951162943422472588" target="_blank" rel="noopener noreferrer">スイーツパラダイスコラボ公式X</a></div>
-        <div class="topic-rationale">根拠: 公式コラボカフェアカウント・公式サイトで発表された映画合同コラボ企画で、開催開始から日が浅く引き続き注目度を高めに設定。</div>
-      </article>
-
+      <div class="card-grid">
       <article class="card">
         <div class="card-head">
           <h4>『アイカツアカデミー！』デジタルアルバムのカード（デミカ）画像・音声ダウンロード機能が本日スタート</h4>
@@ -430,6 +529,17 @@
         <div class="topic-meta-row">🗓 本日開始（2026年8月3日）</div>
         <div class="topic-sources">🔗 <a href="https://aikatsu-academy.com/" target="_blank" rel="noopener noreferrer">アイカツアカデミー！公式サイト</a> / <a href="https://x.com/aikatsu_acad" target="_blank" rel="noopener noreferrer">アイカツアカデミー！公式X</a></div>
         <div class="topic-rationale">根拠: 公式サイト・公式アカウントによる当日発表の新機能。ファンにとって実用性の高い機能追加だが対象は既存デミカ所持者に限られる。</div>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <h4>『アイカツ！×プリパラ THE MOVIE -出会いのキセキ-』×スイーツパラダイス コラボカフェ、上野マルイ店にて開催中（開催3日目）</h4>
+          <span class="stars" title="注目度 4/5" aria-label="注目度 4 / 5"><span class="stars-glyph">★★★★☆</span><span class="stars-bar"><span class="stars-fill" style="width:80%"></span></span></span>
+        </div>
+        <p class="topic-desc">スイーツパラダイス上野マルイ店にて8/1(金)より開催中の劇場版『アイカツ！×プリパラ THE MOVIE -出会いのキセキ-』コラボカフェが引き続き営業中。8/31(日)までの期間限定で、コラボメニュー注文ごとのオリジナルコースター、来店ごとのランチョンマット等のノベルティ配布や描き下ろしグッズ販売が続く。9月には京都のカフェスタンドでも展開予定。</p>
+        <div class="topic-meta-row">🗓 現在開催中（8/1〜8/31）</div>
+        <div class="topic-sources">🔗 <a href="https://www.sweets-paradise.jp/collaboration/aikatsu-pripara" target="_blank" rel="noopener noreferrer">スイーツパラダイス公式サイト</a> / <a href="https://x.com/SP_collabo/status/1951162943422472588" target="_blank" rel="noopener noreferrer">スイーツパラダイスコラボ公式X</a></div>
+        <div class="topic-rationale">根拠: 公式コラボカフェアカウント・公式サイトで発表された映画合同コラボ企画で、開催開始から日が浅く引き続き注目度を高めに設定。</div>
       </article>
 
       <article class="card">
@@ -455,9 +565,9 @@
       </article></div>
       </section>
 
-      <section id="daily-2026年8月2日-4" class="period-block">
+      <section id="daily-2026年8月2日-5" class="period-block">
         <h3>2026年8月2日</h3>
-        <div class="card-grid">
+      <div class="card-grid">
       <article class="card">
         <div class="card-head">
           <h4>『アイカツ！×プリパラ THE MOVIE -出会いのキセキ-』×スイーツパラダイス コラボカフェ、上野マルイ店にて開催中（開催2日目）</h4>
@@ -503,9 +613,9 @@
       </article></div>
       </section>
 
-      <section id="daily-2026年8月1日-5" class="period-block">
+      <section id="daily-2026年8月1日-6" class="period-block">
         <h3>2026年8月1日</h3>
-        <div class="card-grid">
+      <div class="card-grid">
       <article class="card">
         <div class="card-head">
           <h4>coly cafe!（池袋PARCO）×『アイカツ！10th STORY ～未来へのSTARWAY～』コラボ、開催2日目</h4>
@@ -529,9 +639,9 @@
       </article></div>
       </section>
 
-      <section id="daily-2026年7月31日-6" class="period-block">
+      <section id="daily-2026年7月31日-7" class="period-block">
         <h3>2026年7月31日</h3>
-        <div class="card-grid">
+      <div class="card-grid">
       <article class="card">
         <div class="card-head">
           <h4>coly cafe!（池袋PARCO）×『アイカツ！10th STORY ～未来へのSTARWAY～』コラボ、本日開催スタート</h4>
@@ -555,9 +665,9 @@
       </article></div>
       </section>
 
-      <section id="daily-2026年7月30日-7" class="period-block">
+      <section id="daily-2026年7月30日-8" class="period-block">
         <h3>2026年7月30日</h3>
-        <div class="card-grid">
+      <div class="card-grid">
       <article class="card">
         <div class="card-head">
           <h4>『アイカツ！』POP UP SHOP in 東京キャラクターストリート、本日が最終日</h4>
@@ -581,9 +691,9 @@
       </article></div>
       </section>
 
-      <section id="daily-2026年7月29日-8" class="period-block">
+      <section id="daily-2026年7月29日-9" class="period-block">
         <h3>2026年7月29日</h3>
-        <div class="card-grid">
+      <div class="card-grid">
       <article class="card">
         <div class="card-head">
           <h4>『アイカツ！』POP UP SHOP in 東京キャラクターストリート、いよいよ明日が最終日（〜7/30）</h4>
@@ -607,9 +717,9 @@
       </article></div>
       </section>
 
-      <section id="daily-2026年7月28日-9" class="period-block">
+      <section id="daily-2026年7月28日-10" class="period-block">
         <h3>2026年7月28日</h3>
-        <div class="card-grid">
+      <div class="card-grid">
       <article class="card">
         <div class="card-head">
           <h4>『アイカツ！』POP UP SHOP in 東京キャラクターストリート、本日含めあと3日で会期終了（〜7/30）</h4>
@@ -633,9 +743,9 @@
       </article></div>
       </section>
 
-      <section id="daily-2026年7月27日-10" class="period-block">
+      <section id="daily-2026年7月27日-11" class="period-block">
         <h3>2026年7月27日</h3>
-        <div class="card-grid">
+      <div class="card-grid">
       <article class="card">
         <div class="card-head">
           <h4>『アイカツ！』POP UP SHOP in 東京キャラクターストリート、いよいよ残り3日（〜7/30まで）</h4>
@@ -659,9 +769,9 @@
       </article></div>
       </section>
 
-      <section id="daily-2026年7月26日-11" class="period-block">
+      <section id="daily-2026年7月26日-12" class="period-block">
         <h3>2026年7月26日</h3>
-        <div class="card-grid">
+      <div class="card-grid">
       <article class="card">
         <div class="card-head">
           <h4>『アイカツ！』POP UP SHOP in 東京キャラクターストリート、会期終盤（〜7/30まで）</h4>
@@ -674,9 +784,9 @@
       </article></div>
       </section>
 
-      <section id="daily-2026年7月25日-12" class="period-block">
+      <section id="daily-2026年7月25日-13" class="period-block">
         <h3>2026年7月25日</h3>
-        <div class="card-grid">
+      <div class="card-grid">
       <article class="card">
         <div class="card-head">
           <h4>『アイカツ！』POP UP SHOP in 東京キャラクターストリート開催中（7/17〜7/30）</h4>
@@ -715,19 +825,19 @@
 
   <section class="tab-panel" id="tab-weekly">
     <div class="layout">
-      <ul class="side-nav" id="weekly-nav"><li><a href="#weekly-2026年8月2日週-7-27-8-2-0" class="nav-link">2026年8月2日週（7/27〜8/2）</a></li>
-<li><a href="#weekly-2026年7月26日週-7-20-7-26-1" class="nav-link">2026年7月26日週（7/20〜7/26）</a></li></ul>
+      <ul class="side-nav" id="weekly-nav"><li><a href="#weekly-2026年8月2日週-7-27-8-2--0" class="nav-link">2026年8月2日週（7/27〜8/2）</a></li>
+<li><a href="#weekly-2026年7月26日週-7-20-7-26--1" class="nav-link">2026年7月26日週（7/20〜7/26）</a></li></ul>
       <div id="weekly-content">
-      <section id="weekly-2026年8月2日週-7-27-8-2-0" class="period-block">
+      <section id="weekly-2026年8月2日週-7-27-8-2--0" class="period-block">
         <h3>2026年8月2日週（7/27〜8/2）</h3>
-        <div class="card-grid">
+      <div class="card-grid">
       <article class="card">
         <div class="card-head">
           <h4>『アイカツ！×プリパラ THE MOVIE -出会いのキセキ-』×スイーツパラダイス コラボカフェ、上野マルイ店で開催開始</h4>
           <span class="stars" title="注目度 4/5" aria-label="注目度 4 / 5"><span class="stars-glyph">★★★★☆</span><span class="stars-bar"><span class="stars-fill" style="width:80%"></span></span></span>
         </div>
         <p class="topic-desc">劇場版『アイカツ！×プリパラ THE MOVIE -出会いのキセキ-』とスイーツパラダイスのコラボカフェが8/1(金)より上野マルイ店にて開催開始（〜8/31）。コラボメニュー注文・来店ごとの限定ノベルティ配布や描き下ろしグッズ販売があり、9月には京都のカフェスタンドでも展開予定。今週最大の新規展開のひとつ。</p>
-        
+        <div class="topic-meta-row">🗓 </div>
         <div class="topic-sources">🔗 <a href="https://www.sweets-paradise.jp/collaboration/aikatsu-pripara" target="_blank" rel="noopener noreferrer">スイーツパラダイス公式サイト</a> / <a href="https://x.com/SP_collabo/status/1951162943422472588" target="_blank" rel="noopener noreferrer">スイーツパラダイスコラボ公式X</a></div>
         <div class="topic-rationale">根拠: 公式コラボカフェアカウント・公式サイトで発表された、映画コラボとしては規模の大きい新規カフェ企画で、週の終盤に開催初日を迎えた。</div>
       </article>
@@ -738,7 +848,7 @@
           <span class="stars" title="注目度 4/5" aria-label="注目度 4 / 5"><span class="stars-glyph">★★★★☆</span><span class="stars-bar"><span class="stars-fill" style="width:80%"></span></span></span>
         </div>
         <p class="topic-desc">コラボカフェ「coly cafe!」池袋PARCO店にて、劇場版『アイカツ！10th STORY ～未来へのSTARWAY～』とのコラボレーションが7/31(金)より開催開始（〜8/31、前期・後期制）。週内は開催直後の状態が続き、日次ダイジェストでも連日取り上げられた。</p>
-        
+        <div class="topic-meta-row">🗓 </div>
         <div class="topic-sources">🔗 <a href="https://x.com/colycafe_info/status/2070431890952122402" target="_blank" rel="noopener noreferrer">coly cafe!公式X</a></div>
         <div class="topic-rationale">根拠: コラボカフェ公式アカウントによる発表で、週内に開催初日を迎え、以降も継続的に言及された新規企画。</div>
       </article>
@@ -749,7 +859,7 @@
           <span class="stars" title="注目度 3/5" aria-label="注目度 3 / 5"><span class="stars-glyph">★★★☆☆</span><span class="stars-bar"><span class="stars-fill" style="width:60%"></span></span></span>
         </div>
         <p class="topic-desc">「アイカツ８」の描き下ろしイラストグッズを扱うPOP UP SHOPが東京キャラクターストリートおよび通販サイトにて7/17より開催されてきたが、週の前半7/30をもって会期終了。週を通じて閉幕直前の駆け込み需要が連日話題となった。</p>
-        
+        <div class="topic-meta-row">🗓 </div>
         <div class="topic-sources">🔗 <a href="https://animeanime.jp/article/2026/07/17/101156.html" target="_blank" rel="noopener noreferrer">animeanime.jp</a> / <a href="https://eeo.today/pr/aikatsu-tokyo/" target="_blank" rel="noopener noreferrer">eeo.today</a></div>
         <div class="topic-rationale">根拠: アニメ系ニュースメディア複数で継続的に報じられ、閉幕まで週内連日ダイジェストに登場した長期案件。</div>
       </article>
@@ -760,7 +870,7 @@
           <span class="stars" title="注目度 3/5" aria-label="注目度 3 / 5"><span class="stars-glyph">★★★☆☆</span><span class="stars-bar"><span class="stars-fill" style="width:60%"></span></span></span>
         </div>
         <p class="topic-desc">7/18開催の2周年記念ライブ「2nd Anniversary LIVE」について、週末8/2(日)20:00よりエリオントによる「みどころ紹介」生配信を実施。配信チケット購入・アーカイブ視聴の期限はいずれも8/16(日)まで。</p>
-        
+        <div class="topic-meta-row">🗓 </div>
         <div class="topic-sources">🔗 <a href="https://aikatsu-academy.com/2nd-anniversary-live/" target="_blank" rel="noopener noreferrer">アイカツアカデミー！公式サイト</a> / <a href="https://x.com/aikatsu_acad" target="_blank" rel="noopener noreferrer">アイカツアカデミー！公式X</a></div>
         <div class="topic-rationale">根拠: 公式サイト・公式アカウントで告知された、週末に実施された当日性のある関連番組。</div>
       </article>
@@ -771,22 +881,22 @@
           <span class="stars" title="注目度 2/5" aria-label="注目度 2 / 5"><span class="stars-glyph">★★☆☆☆</span><span class="stars-bar"><span class="stars-fill" style="width:40%"></span></span></span>
         </div>
         <p class="topic-desc">BANDAI SPIRITS公式の一番くじシリーズにアイカツ！が登場。描き下ろしグッズがラインナップされ、5/30の発売開始以降、今週も数量限定で販売が継続された。</p>
-        
+        <div class="topic-meta-row">🗓 </div>
         <div class="topic-sources">🔗 <a href="https://1kuji.com/products/aikatsu7" target="_blank" rel="noopener noreferrer">1kuji.com</a></div>
         <div class="topic-rationale">根拠: 公式グッズ販売ページで週間を通じ販売継続を確認。話題の広がりは限定的ながら安定して展開。</div>
       </article></div>
       </section>
 
-      <section id="weekly-2026年7月26日週-7-20-7-26-1" class="period-block">
+      <section id="weekly-2026年7月26日週-7-20-7-26--1" class="period-block">
         <h3>2026年7月26日週（7/20〜7/26）</h3>
-        <div class="card-grid">
+      <div class="card-grid">
       <article class="card">
         <div class="card-head">
           <h4>『アイカツ！』POP UP SHOP in 東京キャラクターストリート、開催中</h4>
           <span class="stars" title="注目度 3/5" aria-label="注目度 3 / 5"><span class="stars-glyph">★★★☆☆</span><span class="stars-bar"><span class="stars-fill" style="width:60%"></span></span></span>
         </div>
         <p class="topic-desc">「アイカツ８」（星宮いちご・有栖川おとめ・藤堂ユリカ・音城セイラ・風沢そら・姫里マリア・神崎美月・夏樹みくる）の描き下ろしイラストグッズを扱うPOP UP SHOPが、東京キャラクターストリートおよび通販サイト「東京キャラクターストリートオンラインプラザ」にて7/17から継続開催中（〜7/30まで）。今週を通じて話題が継続した。</p>
-        
+        <div class="topic-meta-row">🗓 </div>
         <div class="topic-sources">🔗 <a href="https://animeanime.jp/article/2026/07/17/101156.html" target="_blank" rel="noopener noreferrer">animeanime.jp</a> / <a href="https://cho-animedia.jp/article/2026/07/17/61401.html" target="_blank" rel="noopener noreferrer">cho-animedia.jp</a></div>
         <div class="topic-rationale">根拠: アニメ系ニュースメディア複数（アニメ！アニメ！・超！アニメディア）で報道され、会期終了間際まで週内継続して言及された。</div>
       </article>
@@ -797,7 +907,7 @@
           <span class="stars" title="注目度 3/5" aria-label="注目度 3 / 5"><span class="stars-glyph">★★★☆☆</span><span class="stars-bar"><span class="stars-fill" style="width:60%"></span></span></span>
         </div>
         <p class="topic-desc">ステージコーデとハートをモチーフにしたダイキャスト製のWチャームがガシャポンに登場。全6種、1回400円（税込）で、SNS上で「めっちゃ可愛い」等の好意的な反応が見られた。</p>
-        
+        <div class="topic-meta-row">🗓 </div>
         <div class="topic-sources">🔗 <a href="https://news.mynavi.jp/article/20260723-4725082/" target="_blank" rel="noopener noreferrer">news.mynavi.jp</a></div>
         <div class="topic-rationale">根拠: マイナビニュースが報道し、SNS上での好意的な反応が複数紹介された。</div>
       </article>
@@ -808,7 +918,7 @@
           <span class="stars" title="注目度 2/5" aria-label="注目度 2 / 5"><span class="stars-glyph">★★☆☆☆</span><span class="stars-bar"><span class="stars-fill" style="width:40%"></span></span></span>
         </div>
         <p class="topic-desc">BANDAI SPIRITS公式の一番くじシリーズにアイカツ！が登場。オーロラキスコーデ アクセサリートレイやエンジェリーベアのねそべりぬいぐるみなど描き下ろしグッズがラインナップ。数量限定・なくなり次第終了で販売継続中。</p>
-        
+        <div class="topic-meta-row">🗓 </div>
         <div class="topic-sources">🔗 <a href="https://1kuji.com/products/aikatsu7" target="_blank" rel="noopener noreferrer">1kuji.com</a></div>
         <div class="topic-rationale">根拠: 公式グッズ販売ページ・複数のホビー系メディアで確認できるが、話題の広がりは限定的。</div>
       </article></div>
@@ -822,14 +932,14 @@
       <div id="monthly-content">
       <section id="monthly-2026年7月-0" class="period-block">
         <h3>2026年7月</h3>
-        <div class="card-grid">
+      <div class="card-grid">
       <article class="card">
         <div class="card-head">
           <h4>『アイカツ！』POP UP SHOP in 東京キャラクターストリート、7/17〜7/30で開催</h4>
           <span class="stars" title="注目度 4/5" aria-label="注目度 4 / 5"><span class="stars-glyph">★★★★☆</span><span class="stars-bar"><span class="stars-fill" style="width:80%"></span></span></span>
         </div>
         <p class="topic-desc">「アイカツ８」（星宮いちご・有栖川おとめ・藤堂ユリカ・音城セイラ・風沢そら・姫里マリア・神崎美月・夏樹みくる）の描き下ろしイラストグッズを扱うPOP UP SHOPが、東京キャラクターストリートおよび通販サイト「東京キャラクターストリートオンラインプラザ」にて2週間にわたり開催され、月内を通じて継続的に話題となった。7/30に会期終了。</p>
-        
+        <div class="topic-meta-row">🗓 </div>
         <div class="topic-sources">🔗 <a href="https://animeanime.jp/article/2026/07/17/101156.html" target="_blank" rel="noopener noreferrer">animeanime.jp</a> / <a href="https://cho-animedia.jp/article/2026/07/17/61401.html" target="_blank" rel="noopener noreferrer">cho-animedia.jp</a> / <a href="https://eeo.today/pr/aikatsu-tokyo/" target="_blank" rel="noopener noreferrer">eeo.today</a></div>
         <div class="topic-rationale">根拠: アニメ系ニュースメディア複数で報道され、開催期間中は日次ダイジェストで最も繰り返し言及された話題。歴代人気キャラ8人集結でファンの反応も継続的にあった。</div>
       </article>
@@ -840,7 +950,7 @@
           <span class="stars" title="注目度 4/5" aria-label="注目度 4 / 5"><span class="stars-glyph">★★★★☆</span><span class="stars-bar"><span class="stars-fill" style="width:80%"></span></span></span>
         </div>
         <p class="topic-desc">コラボカフェ「coly cafe!」池袋PARCO店にて、劇場版『アイカツ！10th STORY』とのコラボが月末7/31より開催開始（〜8/31）。前期・後期に分けてメニューやグッズが展開される予定で、来月にかけて話題化が見込まれる。</p>
-        
+        <div class="topic-meta-row">🗓 </div>
         <div class="topic-sources">🔗 <a href="https://x.com/colycafe_info/status/2070431890952122402" target="_blank" rel="noopener noreferrer">coly cafe!公式X</a></div>
         <div class="topic-rationale">根拠: コラボカフェ公式アカウントによる発表で、月末に開催初日を迎えた新規コラボ企画。</div>
       </article>
@@ -851,7 +961,7 @@
           <span class="stars" title="注目度 3/5" aria-label="注目度 3 / 5"><span class="stars-glyph">★★★☆☆</span><span class="stars-bar"><span class="stars-fill" style="width:60%"></span></span></span>
         </div>
         <p class="topic-desc">ステージコーデとハートをモチーフにしたダイキャスト製のWチャームがガシャポンに登場。全6種、1回400円（税込）で、SNS上で「めっちゃ可愛い」等の好意的な反応が見られた。</p>
-        
+        <div class="topic-meta-row">🗓 </div>
         <div class="topic-sources">🔗 <a href="https://news.mynavi.jp/article/20260723-4725082/" target="_blank" rel="noopener noreferrer">news.mynavi.jp</a></div>
         <div class="topic-rationale">根拠: マイナビニュースが報道し、SNS上での好意的な反応が複数紹介された。</div>
       </article>
@@ -862,7 +972,7 @@
           <span class="stars" title="注目度 2/5" aria-label="注目度 2 / 5"><span class="stars-glyph">★★☆☆☆</span><span class="stars-bar"><span class="stars-fill" style="width:40%"></span></span></span>
         </div>
         <p class="topic-desc">BANDAI SPIRITS公式の一番くじシリーズにアイカツ！が登場。オーロラキスコーデ アクセサリートレイやエンジェリーベアのねそべりぬいぐるみなど描き下ろしグッズがラインナップ。5/30の発売開始以降、7月を通じて数量限定で販売が継続された。</p>
-        
+        <div class="topic-meta-row">🗓 </div>
         <div class="topic-sources">🔗 <a href="https://1kuji.com/products/aikatsu7" target="_blank" rel="noopener noreferrer">1kuji.com</a></div>
         <div class="topic-rationale">根拠: 公式グッズ販売ページで月間を通じ販売継続を確認。話題の広がりは限定的ながら安定して展開。</div>
       </article></div>

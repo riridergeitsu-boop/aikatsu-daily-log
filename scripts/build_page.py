@@ -18,6 +18,7 @@ docs/index.html （GitHub Pages公開用の単一HTMLページ）を再生成す
 """
 import html
 import re
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -213,7 +214,8 @@ def build():
     weekly_nav, weekly_content = render_period_section("weekly", weekly, show_occurred=False)
     monthly_nav, monthly_content = render_period_section("monthly", monthly, show_occurred=False)
 
-    last_updated = daily[0]["heading"] if daily else "-"
+    jst_now = datetime.now(timezone(timedelta(hours=9)))
+    last_updated = jst_now.strftime("%Y年%m月%d日 %H:%M JST")
 
     template_path = ROOT / "scripts" / "template.html"
     template = template_path.read_text(encoding="utf-8")
